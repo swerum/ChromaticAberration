@@ -10,16 +10,20 @@ public enum RGB {
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject labyrinthTilePrefab;
-    [SerializeField] private int maxOffset = 5;
     [SerializeField] private PostEffectsController postEffectsController;
     [SerializeField] AnimationCurve labyrinthMovementAnimation;
     [SerializeField] float labyrinthMovementTime = 0.4f;
-    // [SerializeField] private float tileDistance = 0.05f;
-    [Header("Level Info")]
-    [SerializeField] private Vector2Int levelSize;
-    [SerializeField] private TextAsset textFile;
-    [SerializeField] private Vector2Int mouseStartPos;
-    [SerializeField] private Vector2Int cheesePos;
+    [SerializeField] LevelInfo levelInfo;
+
+    [Header("Materials")]
+    [SerializeField] Material redTile;
+    [SerializeField] Material blueTile;
+    [SerializeField] Material greenTile;
+
+    [Header("LabyrinthParents")]
+    [SerializeField] Transform redParent;
+    [SerializeField] Transform greenParent;
+    [SerializeField] Transform blueParent;
 
     private bool[,] levelMatrix;
     private Vector2 redOffset = new(0,0);
@@ -29,16 +33,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        levelMatrix = FillLevelMatrix();
-        for (int i = 0; i < levelMatrix.GetLength(0); i++)
-        {
-            for (int j = 0; j < levelMatrix.GetLength(1); j++)
-            {
-                if (levelMatrix[i,j]) {
-                    InstantiateTile(levelMatrix, i, j);
-                }
-            }
-        }
+        Labyrinth.CreateLabyrinth(redTile, levelInfo.redLabyrinthTextFile, labyrinthTilePrefab, levelInfo.levelSize, redParent);
+        Labyrinth.CreateLabyrinth(greenTile, levelInfo.greenLabyrinthTextFile, labyrinthTilePrefab, levelInfo.levelSize, greenParent);
+        Labyrinth.CreateLabyrinth(blueTile, levelInfo.blueLabyrinthTextFile, labyrinthTilePrefab, levelInfo.levelSize, blueParent);
     }
     
     public void MoveLabyrinth(RGB colorChannel, Vector2 direction) {
@@ -63,11 +60,11 @@ public class GameManager : MonoBehaviour
         StartCoroutine(coroutine);
         redOffset += redDirection;
         blueOffset += blueDirection;
-
+        
         Vector2 VerifyDirection(Vector2 initialOffset, Vector2 attemptedChange) {
             Vector2 newOffset = initialOffset + attemptedChange;
-            if (Mathf.Abs(newOffset.x) > maxOffset) return Vector2.zero;
-            if (Mathf.Abs(newOffset.y) > maxOffset) return Vector2.zero;
+            if (Mathf.Abs(newOffset.x) > levelInfo.maxOffset) return Vector2.zero;
+            if (Mathf.Abs(newOffset.y) > levelInfo.maxOffset) return Vector2.zero;
             return attemptedChange;
         }
 
@@ -79,75 +76,23 @@ public class GameManager : MonoBehaviour
                 time += Time.deltaTime;
                 float ratio = time / labyrinthMovementTime;
                 float animRatio = labyrinthMovementAnimation.Evaluate(ratio);
-                Vector2 redShaderOffset = prevRedOffset + animRatio * redDirection;
-                Vector2 blueShaderOffset = prevBlueOffset + animRatio * blueDirection;
-                postEffectsController.SetAberrationOffsets(redShaderOffset, blueShaderOffset);
+                SetCurrentOffset(animRatio);
             }
-            Vector2 finalRedShaderOffset = prevRedOffset +  redDirection;
-            Vector2 finalBlueShaderOffset = prevBlueOffset + blueDirection;
-            postEffectsController.SetAberrationOffsets(finalRedShaderOffset, finalBlueShaderOffset);
+            SetCurrentOffset(1f);
             labyrinthIsMoving = false;
-        }
-    }
 
-    private bool[,] FillLevelMatrix() {
-        string fileContents = textFile.text;
-        bool[,] levelMatrix = new bool[levelSize.x, levelSize.y];
-        int row = 0; int col = 0;
-        foreach (char c in fileContents)
-        {
-            switch (c) {
-                case 'X': 
-                    levelMatrix[row, col] = false;
-                    col++;
-                    break;
-                case 'O':
-                    levelMatrix[row, col] = true;
-                    col++;
-                    break;
-                case '\n':
-                    row++;
-                    col = 0;
-                    break;
-                default: 
-                    Debug.LogError("Unexpected character in level file: '"+c+"'");
-                    break;
+            void SetCurrentOffset(float animRatio) {
+                Vector2 red = prevRedOffset + animRatio * redDirection;
+                Vector2 blue = prevBlueOffset + animRatio * blueDirection;
+                redParent.position = new Vector3(red.x, 0, red.y);
+                blueParent.position =  new Vector3(blue.x, 0, blue.y);
             }
         }
-        return levelMatrix;
     }
-
-    private void InstantiateTile(bool[,] levelMatrix, int row, int col) {
-        // bool hasLeft    = hasNeighborAt(row+0, col-1);
-        // bool hasRight   = hasNeighborAt(row+0, col+1);
-        // bool hasTop     = hasNeighborAt(row+1, col+0);
-        // bool hasBottom  = hasNeighborAt(row-1, col+0);
-        // //get scale
-        // float zScale = 1f + (BoolToInt(hasLeft) + BoolToInt(hasRight) - 2) * tileDistance;
-        // float xScale = 1f + (BoolToInt(hasTop) + BoolToInt(hasBottom) - 2) * tileDistance;
-        // Debug.Log("Left: "+hasLeft+", Right: "+hasRight+", at: ["+row+","+col+"], width: "+xScale);
-        // Vector3 scale = new Vector3(xScale, 0.1f, zScale);
-        // //get pos
-        // float xPos = row + (BoolToInt(hasRight) - BoolToInt(hasRight)) * tileDistance;
-        // float zPos = col + (BoolToInt(hasBottom) - BoolToInt(hasLeft)) * tileDistance;
-        // Vector3 pos = new Vector3(row, 0, col); //new Vector3(xPos, 0, zPos);
-
-        GameObject obj = Instantiate(labyrinthTilePrefab, new Vector3(row, 0, col), Quaternion.identity, gameObject.transform);
-        // obj.transform.localScale = scale;
-        // obj.transform.position = pos;
-
-        // int BoolToInt(bool b) { return b ? 1 : 0; }
-        // bool hasNeighborAt(int i, int j) {
-        //     if (i >= levelMatrix.GetLength(0) || i < 0) return false;
-        //     if (j >= levelMatrix.GetLength(1) || j < 0) return false;
-        //     return levelMatrix[i,j];
-        // }
-    }
-
 
     public void CheckLabyrinthSolved() {
-        Debug.Log("Checking labyrinth");
-        BFSGrid bfsGrid = new BFSGrid(levelMatrix);
-        bfsGrid.FindShortestPath((mouseStartPos.x, mouseStartPos.y), (cheesePos.x, cheesePos.y));
+        // Debug.Log("Checking labyrinth");
+        // BFSGrid bfsGrid = new BFSGrid(levelMatrix);
+        // bfsGrid.FindShortestPath((levelInfo.mouseStartPos.x, levelInfo.mouseStartPos.y), (levelInfo.cheesePos.x, levelInfo.cheesePos.y));
     }
 }

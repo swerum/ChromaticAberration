@@ -30,12 +30,12 @@ public class InputManager : MonoBehaviour
     void Update()
     {
         Vector2 direction = Vector2.zero;
-        direction.x = -Math.Sign(Input.GetAxis("Horizontal"));
+        direction.x = Math.Sign(Input.GetAxis("Horizontal"));
         if (direction.x != 0) {
             gameManager.MoveLabyrinth(selectedColor, direction);
             return;
         }
-        direction.y = -Math.Sign(Input.GetAxis("Vertical"));
+        direction.y = Math.Sign(Input.GetAxis("Vertical"));
         if (direction.y != 0) {
             gameManager.MoveLabyrinth(selectedColor, direction);
         }
