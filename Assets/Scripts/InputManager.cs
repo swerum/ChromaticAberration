@@ -5,15 +5,15 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    private RGB selectedColor;
+    private int selectedButtonIndex;
     [SerializeField] GameManager gameManager;
     [SerializeField] Button[] buttons;
 
-    public void OnButtonPress(RGB buttonColor) {
-        selectedColor = buttonColor;
+    public void OnButtonPress(int buttonIndex) {
+        selectedButtonIndex = buttonIndex;
         foreach (Button button in buttons)
         {
-            if (button.ButtonColor != buttonColor) {
+            if (button.ButtonIndex != buttonIndex) {
                 button.Deselect();
             }
         }
@@ -23,7 +23,7 @@ public class InputManager : MonoBehaviour
     void Start()
     {
         buttons[0].Select();
-        selectedColor = buttons[0].ButtonColor;
+        selectedButtonIndex = buttons[0].ButtonIndex;
     }
 
     // Update is called once per frame
@@ -32,12 +32,12 @@ public class InputManager : MonoBehaviour
         Vector2 direction = Vector2.zero;
         direction.x = Math.Sign(Input.GetAxis("Horizontal"));
         if (direction.x != 0) {
-            gameManager.MoveLabyrinth(selectedColor, direction);
+            gameManager.MoveLabyrinth(selectedButtonIndex, direction);
             return;
         }
         direction.y = Math.Sign(Input.GetAxis("Vertical"));
         if (direction.y != 0) {
-            gameManager.MoveLabyrinth(selectedColor, direction);
+            gameManager.MoveLabyrinth(selectedButtonIndex, direction);
         }
     }
 }

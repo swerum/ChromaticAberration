@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class Labyrinth
 {
-    public static bool[,] CreateLabyrinth(Material material, TextAsset textFile, GameObject labyrinthTilePrefab, Vector2Int levelSize, Transform labyrinthParent) {
+    public static bool[,] CreateLabyrinth(Color tileColor , TextAsset textFile, GameObject labyrinthTilePrefab, Vector2Int levelSize, Transform labyrinthParent) {
         bool[,] levelMatrix = FillLevelMatrix(levelSize, textFile);
         for (int i = 0; i < levelMatrix.GetLength(0); i++)
         {
@@ -12,7 +12,7 @@ public static class Labyrinth
             {
                 if (levelMatrix[i,j]) {
                     GameObject tile = GameObject.Instantiate(labyrinthTilePrefab,new Vector3(i, 0, j), Quaternion.identity, labyrinthParent);
-                    tile.GetComponent<MeshRenderer>().material = material;
+                    tile.GetComponent<MeshRenderer>().material.SetColor("_Color", tileColor);
                     // InstantiateTile(levelMatrix, i, j);
                 }
             }

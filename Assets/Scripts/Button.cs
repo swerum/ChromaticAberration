@@ -7,8 +7,8 @@ public class Button : MonoBehaviour
 {
     [SerializeField] private RawImage rawImage;
     [SerializeField] private InputManager inputManager;
-    [SerializeField] private RGB buttonColor;
-    public RGB ButtonColor { get { return buttonColor; }}
+    [SerializeField] private int buttonIndex;
+    public int ButtonIndex { get { return buttonIndex; }}
     private bool isSelected = false;
 
     [Header("Textures")]
@@ -22,13 +22,6 @@ public class Button : MonoBehaviour
         rawImage = gameObject.GetComponent<RawImage>();
         Debug.Assert(rawImage != null);
         rawImage.texture = onDeselectedTex;
-
-        //set button color
-        // switch (buttonColor) {
-        //     case RGB.RED:   rawImage.color = new Color(255, 0,0); break;
-        //     case RGB.GREEN: rawImage.color = new Color(0,255,0); break;
-        //     case RGB.BLUE:  rawImage.color = new Color( 0,0, 255); break;
-        // }
     }
 
     private void OnMouseEnter() {
@@ -46,7 +39,7 @@ public class Button : MonoBehaviour
         }
     }
     private void OnMouseUpAsButton() {
-        inputManager.OnButtonPress(buttonColor);
+        inputManager.OnButtonPress(buttonIndex);
         Select();
     }
 

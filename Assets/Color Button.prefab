@@ -88,7 +88,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rawImage: {fileID: 8556965546300288244}
   inputManager: {fileID: 0}
-  buttonColor: 0
+  buttonIndex: 0
   onDeselectedTex: {fileID: 2800000, guid: c2ffef985ef2d45f783b6fdd8045c511, type: 3}
   onDeselectedHoverTex: {fileID: 2800000, guid: c05bdd3ececf646249f479a47cbd7d8e, type: 3}
   onSelectedTex: {fileID: 2800000, guid: 56eaf22f251e0487988bc9a89a30629f, type: 3}
@@ -127,4 +127,4 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 27.3
+  m_Radius: 37.86
