@@ -33,7 +33,11 @@ public class GameManager : MonoBehaviour
             button.gameObject.SetActive(false);
         }
         playButton.material.SetColor("_PrimaryColor", Util.GetColorFromRGB(levelInfo.mouseColors[0]));
-        playButton.material.SetColor("_SecondaryColor", Util.GetColorFromRGB(levelInfo.mouseColors[1]));
+
+        if (levelInfo.mouseColors.Length == 1) {
+            Color c = Color.Lerp(Util.GetColorFromRGB(levelInfo.mouseColors[0]), Color.black, 0.1f);
+            playButton.material.SetColor("_SecondaryColor", c); 
+        } else { playButton.material.SetColor("_SecondaryColor", Util.GetColorFromRGB(levelInfo.mouseColors[1])); }
 
         for (int i = 0; i < levelInfo.labyrinths.Length; i++)
         {
@@ -48,9 +52,9 @@ public class GameManager : MonoBehaviour
         }
 
         Vector3 mousePos = new Vector3(levelInfo.mouseStartPos.x, 0.5f, levelInfo.mouseStartPos.y);
-        Instantiate(mousePrefab, mousePos, Quaternion.identity);
+        Instantiate(mousePrefab).transform.position = mousePos;
         Vector3 cheesePos = new Vector3(levelInfo.cheesePos.x, 0.5f, levelInfo.cheesePos.y);
-        Instantiate(cheesePrefab, cheesePos, Quaternion.identity);
+        Instantiate(cheesePrefab).transform.position = cheesePos;
     }
     
     public void MoveLabyrinth(int labyrinthIndex, Vector2 direction) {
