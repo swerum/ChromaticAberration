@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class Labyrinth
+public static class Util
 {
     public static bool[,] CreateLabyrinth(Color tileColor , TextAsset textFile, GameObject labyrinthTilePrefab, Vector2Int levelSize, Transform labyrinthParent) {
         bool[,] levelMatrix = FillLevelMatrix(levelSize, textFile);
@@ -46,6 +46,24 @@ public static class Labyrinth
         }
         return levelMatrix;
     }
+
+    public static IEnumerator MoveOverTime( Transform transform, Vector2 prevPosition, Vector2 offset, float movementTime) {
+            // Vector2 prevOffset = levelInfo.labyrinths[labyrinthIndex].Offset;
+            float time = 0f;
+            while (time < movementTime) {
+                yield return new WaitForFixedUpdate();
+                time += Time.deltaTime;
+                float ratio = time / movementTime;
+                float animRatio = AnimationCurve.EaseInOut(0,0,1,1).Evaluate(ratio);
+                SetCurrentOffset(animRatio);
+            }
+            SetCurrentOffset(1f);
+
+            void SetCurrentOffset(float animRatio) {
+                Vector2 currentOffset = prevPosition + animRatio * offset;
+                transform.position = new Vector3(currentOffset.x, 0, currentOffset.y);
+            }
+        }
 
     // private static void InstantiateTile(bool[,] levelMatrix, int row, int col, GameObject labyrinthTilePrefab) {
     //     // bool hasLeft    = hasNeighborAt(row+0, col-1);

@@ -17,8 +17,8 @@ MonoBehaviour:
   maxOffset: 3
   labyrinths:
   - labyrinthTextFile: {fileID: 4900000, guid: 18f955e746f7a454ba50e40024741c9b, type: 3}
-    rgbColor: 2
+    rgbColor: 0
   - labyrinthTextFile: {fileID: 4900000, guid: 18f955e746f7a454ba50e40024741c9b, type: 3}
     rgbColor: 1
   mouseStartPos: {x: 0, y: 0}
-  mouseColors: 0400000001000000
+  mouseColors: 0300000001000000

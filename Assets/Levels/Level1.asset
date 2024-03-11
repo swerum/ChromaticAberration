@@ -12,17 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f5d4fcf582e943aa94413607cc1616b, type: 3}
   m_Name: Level1
   m_EditorClassIdentifier: 
+  cheesePos: {x: 4, y: 4}
   levelSize: {x: 5, y: 5}
+  maxOffset: 3
   labyrinths:
   - labyrinthTextFile: {fileID: 4900000, guid: 18f955e746f7a454ba50e40024741c9b, type: 3}
-    color: {r: 1, g: 0, b: 0, a: 1}
     rgbColor: 0
   - labyrinthTextFile: {fileID: 4900000, guid: 18f955e746f7a454ba50e40024741c9b, type: 3}
-    color: {r: 0, g: 1, b: 0, a: 1}
     rgbColor: 1
   - labyrinthTextFile: {fileID: 4900000, guid: f3d020e165ce44816b42811f3693a27c, type: 3}
-    color: {r: 0, g: 0, b: 1, a: 1}
     rgbColor: 2
   mouseStartPos: {x: 0, y: 0}
-  cheesePos: {x: 5, y: 5}
-  maxOffset: 3
+  mouseColors: 03000000

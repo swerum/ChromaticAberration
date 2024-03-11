@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 
 // using System.Numerics;
 using UnityEngine;
@@ -33,18 +34,19 @@ public class GameManager : MonoBehaviour
         {
             button.gameObject.SetActive(false);
         }
-        playButton.material.SetColor("_PrimaryColor", Util.GetColorFromRGB(levelInfo.mouseColors[0]));
+        playButton.material.SetColor("_PrimaryColor", ColorUtil.GetColorFromRGB(levelInfo.mouseColors[0]));
 
         if (levelInfo.mouseColors.Length == 1) {
-            Color c = Color.Lerp(Util.GetColorFromRGB(levelInfo.mouseColors[0]), Color.black, 0.1f);
+            Color c = Color.Lerp(ColorUtil.GetColorFromRGB(levelInfo.mouseColors[0]), Color.black, 0.1f);
             playButton.material.SetColor("_SecondaryColor", c); 
-        } else { playButton.material.SetColor("_SecondaryColor", Util.GetColorFromRGB(levelInfo.mouseColors[1])); }
+        } else { playButton.material.SetColor("_SecondaryColor", ColorUtil.GetColorFromRGB(levelInfo.mouseColors[1])); }
 
         for (int i = 0; i < levelInfo.labyrinths.Length; i++)
         {
             LabyrinthInfo labyrinthInfo = levelInfo.labyrinths[i];
-            Color color = Util.GetColorFromRGB(labyrinthInfo.rgbColor);
-            bool[,] matrix = Labyrinth.CreateLabyrinth(color, labyrinthInfo.labyrinthTextFile, labyrinthTilePrefab, levelInfo.levelSize, labyrinthParents[i]);
+            Debug.Log("Starting offset: "+labyrinthInfo.Offset);
+            Color color = ColorUtil.GetColorFromRGB(labyrinthInfo.rgbColor);
+            bool[,] matrix = Util.CreateLabyrinth(color, labyrinthInfo.labyrinthTextFile, labyrinthTilePrefab, levelInfo.levelSize, labyrinthParents[i]);
             // levelMatrices.Add(matrix);
             labyrinthInfo.LevelMatrix = matrix;
 
@@ -67,36 +69,25 @@ public class GameManager : MonoBehaviour
         if (Mathf.Abs(newOffset.y) > levelInfo.maxOffset) { return; }
 
         //update visuals
-        IEnumerator coroutine = MoveLabyrinthOverTime(labyrinthIndex, direction);
+        LabyrinthInfo labyrinthInfo = levelInfo.labyrinths[labyrinthIndex];
+        IEnumerator coroutine = MoveLabyrinth(labyrinthParents[labyrinthIndex], labyrinthInfo.Offset, direction, labyrinthMovementTime);
         StartCoroutine(coroutine);
+        Debug.Log("adding "+direction+" to offset");
         levelInfo.labyrinths[labyrinthIndex].Offset += direction;
         
-
-        IEnumerator MoveLabyrinthOverTime(int labyrinthIndex,  Vector2 direction) {
-            Vector2 prevOffset = levelInfo.labyrinths[labyrinthIndex].Offset;
-            float time = 0f;
+        IEnumerator MoveLabyrinth( Transform transform, Vector2 prevPosition, Vector2 offset, float movementTime) {
+            // Vector2 prevOffset = levelInfo.labyrinths[labyrinthIndex].Offset;
             labyrinthIsMoving = true;
-            while (time < labyrinthMovementTime) {
-                yield return new WaitForFixedUpdate();
-                time += Time.deltaTime;
-                float ratio = time / labyrinthMovementTime;
-                float animRatio = labyrinthMovementAnimation.Evaluate(ratio);
-                SetCurrentOffset(animRatio);
-            }
-            SetCurrentOffset(1f);
+            IEnumerator coroutine = Util.MoveOverTime(transform,prevPosition, offset, movementTime);
+            yield return StartCoroutine(coroutine);
             labyrinthIsMoving = false;
-
-            void SetCurrentOffset(float animRatio) {
-                Vector2 offset = prevOffset + animRatio * direction;
-                labyrinthParents[labyrinthIndex].position = new Vector3(offset.x, 0, offset.y);
-            }
         }
     }
-
+    [ExecuteInEditMode]
     public void CheckLabyrinthSolved() {
         Debug.Log("Checking labyrinth");
         DFSGrid dfs = new DFSGrid(levelInfo, mouse);
-        List<Vector2Int> list = dfs.FindShortestPath();
-        Debug.Log(list.ToString());
+        bool reachedGoal = dfs.FindShortestPath();
+        Debug.Log("Solved Puzzle: "+reachedGoal);
     }
 }
