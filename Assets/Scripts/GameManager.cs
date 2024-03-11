@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
 
     // private Vector2[] offsets = new Vector2[3];
     private bool labyrinthIsMoving = false;
+    private GameObject mouse;
 
     // Start is called before the first frame update
     void Start()
@@ -52,7 +53,8 @@ public class GameManager : MonoBehaviour
         }
 
         Vector3 mousePos = new Vector3(levelInfo.mouseStartPos.x, 0.5f, levelInfo.mouseStartPos.y);
-        Instantiate(mousePrefab).transform.position = mousePos;
+        mouse = Instantiate(mousePrefab);
+        mouse.transform.position = mousePos;
         Vector3 cheesePos = new Vector3(levelInfo.cheesePos.x, 0.5f, levelInfo.cheesePos.y);
         Instantiate(cheesePrefab).transform.position = cheesePos;
     }
@@ -92,8 +94,9 @@ public class GameManager : MonoBehaviour
     }
 
     public void CheckLabyrinthSolved() {
-        // Debug.Log("Checking labyrinth");
-        // BFSGrid bfsGrid = new BFSGrid(levelMatrix);
-        // bfsGrid.FindShortestPath((levelInfo.mouseStartPos.x, levelInfo.mouseStartPos.y), (levelInfo.cheesePos.x, levelInfo.cheesePos.y));
+        Debug.Log("Checking labyrinth");
+        DFSGrid dfs = new DFSGrid(levelInfo, mouse);
+        List<Vector2Int> list = dfs.FindShortestPath();
+        Debug.Log(list.ToString());
     }
 }

@@ -1304,7 +1304,7 @@ MonoBehaviour:
   labyrinthMovementTime: 0.4
   levelInfo: {fileID: 11400000, guid: 37b824b977acc4898976860ee744f93a, type: 2}
   labyrinthTilePrefab: {fileID: 7425961256225820123, guid: a26db2c013888482f8c252053dfd574c, type: 3}
-  mousePrefab: {fileID: 6344313870551126424, guid: 1477e627f1ad448449098e6beb4022bc, type: 3}
+  mousePrefab: {fileID: 1335115816038879339, guid: 6a5353ab5bee043d2b6e5438458210a7, type: 3}
   cheesePrefab: {fileID: 7336052419423615848, guid: c56ea38089bd94356b66ba9fc6dafb4b, type: 3}
   labyrinthParents:
   - {fileID: 1934104432}
@@ -1694,7 +1694,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6792903986773330987, guid: f8254422a33c24224929624356da5485, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -1085.9
+      value: -988
       objectReference: {fileID: 0}
     - target: {fileID: 6792903986773330987, guid: f8254422a33c24224929624356da5485, type: 3}
       propertyPath: m_AnchoredPosition.y
