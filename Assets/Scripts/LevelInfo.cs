@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 [Serializable]
 public class LabyrinthInfo
@@ -17,6 +18,7 @@ public class LabyrinthInfo
 public class LevelInfo : ScriptableObject
 {
     [SerializeField] public Vector2Int cheesePos;
+    [SerializeField] public RawImage hint;
 
     [Header("Labyrinth Layout")]
     [SerializeField] public Vector2Int levelSize;

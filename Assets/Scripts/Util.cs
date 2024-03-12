@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class Util
 {
@@ -91,6 +92,21 @@ public static class Util
             yield return null;
         }
         transform.gameObject.SetActive(false);
+    }
+
+    public static IEnumerator LerpAlpha(RawImage img, float duration, float startAlpha, float targetAlpha) 
+    {
+        Color color = img.color;
+        float t = 0.0f;
+        while ( t  < duration )
+        {
+            t += Time.deltaTime;
+            float ratio = AnimationCurve.EaseInOut(0,0,1,1).Evaluate(t/duration);
+            color.a = Mathf.Lerp(startAlpha, targetAlpha, ratio);
+            img.color = color;
+            yield return null;
+        }
+        // img.gameObject.SetActive(false);
     }
 
     // private static void InstantiateTile(bool[,] levelMatrix, int row, int col, GameObject labyrinthTilePrefab) {
