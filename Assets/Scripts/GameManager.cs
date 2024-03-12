@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] RawImage[] selectButtons;
     [SerializeField] RawImage playButton;
     [SerializeField] RawImage labyrinthDisplayImage;
-    [SerializeField] RawImage hint;
+    [SerializeField] RawImage hintImage;
     [SerializeField] RawImage gameCompleteImage;
 
     // private Vector2[] offsets = new Vector2[3];
@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
     {
         LevelInfo level = levels[index];
         currentLevelIndex = index;
+        StartCoroutine(ShowHint(level.hint));
         foreach (RawImage button in selectButtons)
         {
             button.gameObject.SetActive(false);
@@ -154,6 +155,7 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(Util.LerpAlpha(button, duration, startAlpha, targetAlpha));
             }
             StartCoroutine(Util.LerpAlpha(playButton, duration, startAlpha, targetAlpha));
+            if (!fadeout) { StartCoroutine(Util.LerpAlpha(hintImage, duration, startAlpha, targetAlpha)); }
             yield return StartCoroutine(Util.LerpAlpha(labyrinthDisplayImage, duration, startAlpha, targetAlpha));
         }
 
@@ -178,6 +180,18 @@ public class GameManager : MonoBehaviour
                 Transform child = lab.GetChild(i);
                 Destroy(child.gameObject);
             }
+        }
+    }
+
+    IEnumerator ShowHint(Texture hint) {
+        if (hint == null) {
+            hintImage.gameObject.SetActive(false);
+        } else {
+            hintImage.gameObject.SetActive(true);
+            hintImage.texture = hint;
+            // hintImage.SetNativeSize();
+            yield return new WaitForSeconds(1f);
+            StartCoroutine(Util.LerpAlpha(hintImage, 0.5f, 1, 0));
         }
     }
 }

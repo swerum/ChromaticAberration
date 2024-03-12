@@ -20,5 +20,7 @@ MonoBehaviour:
     rgbColor: 0
   - labyrinthTextFile: {fileID: 4900000, guid: 18f955e746f7a454ba50e40024741c9b, type: 3}
     rgbColor: 1
+  - labyrinthTextFile: {fileID: 4900000, guid: f3d020e165ce44816b42811f3693a27c, type: 3}
+    rgbColor: 2
   mouseStartPos: {x: 0, y: 0}
-  mouseColors: 0300000001000000
+  mouseColors: 03000000

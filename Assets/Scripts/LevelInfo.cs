@@ -18,7 +18,7 @@ public class LabyrinthInfo
 public class LevelInfo : ScriptableObject
 {
     [SerializeField] public Vector2Int cheesePos;
-    [SerializeField] public RawImage hint;
+    [SerializeField] public Texture hint = null;
 
     [Header("Labyrinth Layout")]
     [SerializeField] public Vector2Int levelSize;

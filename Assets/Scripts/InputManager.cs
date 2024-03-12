@@ -32,13 +32,13 @@ public class InputManager : MonoBehaviour
     {
         //check for wasd and arrow keys
         Vector2 direction = Vector2.zero;
-        direction.x = Math.Sign(Input.GetAxis("Horizontal"));
-        if (direction.x != 0) {
+        direction.y = Math.Sign(Input.GetAxis("Horizontal"));
+        if (direction.y != 0) {
             gameManager.MoveLabyrinth(selectedButtonIndex, direction);
             return;
         }
-        direction.y = Math.Sign(Input.GetAxis("Vertical"));
-        if (direction.y != 0) {
+        direction.x = Math.Sign(Input.GetAxis("Vertical"));
+        if (direction.x != 0) {
             gameManager.MoveLabyrinth(selectedButtonIndex, direction);
         }
 
