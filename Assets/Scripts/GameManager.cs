@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] AnimationCurve labyrinthMovementAnimation;
     [SerializeField] float labyrinthMovementTime = 0.4f;
+    [SerializeField] float mouseMovementTime = 0.4f;
     [SerializeField] LevelInfo levelInfo;
 
     [Header("References")]
@@ -23,8 +24,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] RawImage playButton;
 
     // private Vector2[] offsets = new Vector2[3];
-    private bool labyrinthIsMoving = false;
+    private bool disallowMovement = false;
     private GameObject mouse;
+    private GameObject cheese;
 
     // Start is called before the first frame update
     void Start()
@@ -44,10 +46,9 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < levelInfo.labyrinths.Length; i++)
         {
             LabyrinthInfo labyrinthInfo = levelInfo.labyrinths[i];
-            Debug.Log("Starting offset: "+labyrinthInfo.Offset);
+            labyrinthInfo.Offset = Vector2.zero;
             Color color = ColorUtil.GetColorFromRGB(labyrinthInfo.rgbColor);
             bool[,] matrix = Util.CreateLabyrinth(color, labyrinthInfo.labyrinthTextFile, labyrinthTilePrefab, levelInfo.levelSize, labyrinthParents[i]);
-            // levelMatrices.Add(matrix);
             labyrinthInfo.LevelMatrix = matrix;
 
             selectButtons[i].color = color;
@@ -58,12 +59,13 @@ public class GameManager : MonoBehaviour
         mouse = Instantiate(mousePrefab);
         mouse.transform.position = mousePos;
         Vector3 cheesePos = new Vector3(levelInfo.cheesePos.x, 0.5f, levelInfo.cheesePos.y);
-        Instantiate(cheesePrefab).transform.position = cheesePos;
+        cheese = Instantiate(cheesePrefab);
+        cheese.transform.position = cheesePos;
     }
     
     public void MoveLabyrinth(int labyrinthIndex, Vector2 direction) {
-        if (labyrinthIsMoving) { return; }
-        Vector2 initialOffset = levelInfo.labyrinths[labyrinthIndex].Offset; //offsets[labyrinthIndex];
+        if (disallowMovement) { return; }
+        Vector2 initialOffset = levelInfo.labyrinths[labyrinthIndex].Offset; 
         Vector2 newOffset = initialOffset + direction;
         if (Mathf.Abs(newOffset.x) > levelInfo.maxOffset) { return; }
         if (Mathf.Abs(newOffset.y) > levelInfo.maxOffset) { return; }
@@ -72,22 +74,50 @@ public class GameManager : MonoBehaviour
         LabyrinthInfo labyrinthInfo = levelInfo.labyrinths[labyrinthIndex];
         IEnumerator coroutine = MoveLabyrinth(labyrinthParents[labyrinthIndex], labyrinthInfo.Offset, direction, labyrinthMovementTime);
         StartCoroutine(coroutine);
-        Debug.Log("adding "+direction+" to offset");
         levelInfo.labyrinths[labyrinthIndex].Offset += direction;
         
         IEnumerator MoveLabyrinth( Transform transform, Vector2 prevPosition, Vector2 offset, float movementTime) {
             // Vector2 prevOffset = levelInfo.labyrinths[labyrinthIndex].Offset;
-            labyrinthIsMoving = true;
+            disallowMovement = true;
             IEnumerator coroutine = Util.MoveOverTime(transform,prevPosition, offset, movementTime);
             yield return StartCoroutine(coroutine);
-            labyrinthIsMoving = false;
+            disallowMovement = false;
         }
     }
-    [ExecuteInEditMode]
+    
     public void CheckLabyrinthSolved() {
         Debug.Log("Checking labyrinth");
-        DFSGrid dfs = new DFSGrid(levelInfo, mouse);
-        bool reachedGoal = dfs.FindShortestPath();
-        Debug.Log("Solved Puzzle: "+reachedGoal);
+        DFSGrid dfs = new DFSGrid(levelInfo);
+        IEnumerator coroutine = MouseTraverseLabyrinth(dfs.Path);
+        StartCoroutine(coroutine);
+        
+
+        IEnumerator MouseTraverseLabyrinth(List<Vector2Int> path) {
+            disallowMovement = true;
+            Vector2 currentPos = levelInfo.mouseStartPos;
+            foreach (Vector2Int node in path) {
+                Vector2 offset =  node - currentPos;
+                IEnumerator rotatorCoroutine = Util.RotateOverTime(mouse.transform, GetTargetRotation(offset), mouseMovementTime);
+                yield return StartCoroutine(rotatorCoroutine);
+                IEnumerator coroutine = Util.MoveOverTime(mouse.transform,currentPos, offset, mouseMovementTime);
+                yield return StartCoroutine(coroutine);
+                currentPos = node;
+            }
+            if (dfs.Solved) {
+                IEnumerator shrinkCoroutine = Util.ShrinkAway(cheese.transform, 0.6f); 
+                yield return StartCoroutine(shrinkCoroutine);
+            } else {
+                disallowMovement = false;
+            }
+        }
+
+        float GetTargetRotation(Vector2 direction) {
+            if (direction.x == 0 && direction.y == 1) { return 0f;}
+            if (direction.x == 1 && direction.y == 0) { return 90f;}
+            if (direction.x == 0 && direction.y == -1) { return 180f;}
+            if (direction.x == -1 && direction.y == 0) { return 270f;}
+            Debug.LogError("direction: "+direction+" not expected");
+            return 0;
+        }
     }
 }

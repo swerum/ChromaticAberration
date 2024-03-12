@@ -1431,6 +1431,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   labyrinthMovementTime: 0.4
+  mouseMovementTime: 0.19
   levelInfo: {fileID: 11400000, guid: 5c10461714c87493e8f9fc24eadc1732, type: 2}
   labyrinthTilePrefab: {fileID: 7425961256225820123, guid: a26db2c013888482f8c252053dfd574c, type: 3}
   mousePrefab: {fileID: 1335115816038879339, guid: 6a5353ab5bee043d2b6e5438458210a7, type: 3}
@@ -1823,7 +1824,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6792903986773330987, guid: f8254422a33c24224929624356da5485, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -988
+      value: -1087.4
       objectReference: {fileID: 0}
     - target: {fileID: 6792903986773330987, guid: f8254422a33c24224929624356da5485, type: 3}
       propertyPath: m_AnchoredPosition.y

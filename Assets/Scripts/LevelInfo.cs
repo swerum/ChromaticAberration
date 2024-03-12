@@ -9,7 +9,7 @@ public class LabyrinthInfo
     private bool[,] levelMatrix;
     public bool[,] LevelMatrix { get {return levelMatrix;} set { levelMatrix = value; }}
 
-    private Vector2 offset;
+    private Vector2 offset = new Vector2(0,0);
     public Vector2 Offset { get {return offset;} set { offset = value; }}
 }
 

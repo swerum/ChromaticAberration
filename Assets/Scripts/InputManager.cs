@@ -11,6 +11,7 @@ public class InputManager : MonoBehaviour
 
     public void OnButtonPress(int buttonIndex) {
         selectedButtonIndex = buttonIndex;
+        buttons[buttonIndex].Select();
         foreach (Button button in buttons)
         {
             if (button.ButtonIndex != buttonIndex) {
@@ -29,6 +30,7 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //check for wasd and arrow keys
         Vector2 direction = Vector2.zero;
         direction.x = Math.Sign(Input.GetAxis("Horizontal"));
         if (direction.x != 0) {
@@ -39,5 +41,10 @@ public class InputManager : MonoBehaviour
         if (direction.y != 0) {
             gameManager.MoveLabyrinth(selectedButtonIndex, direction);
         }
+
+        //check for 1,2,3 which activate the buttons
+        if (Input.GetAxis("Button1") > 0)       { OnButtonPress(0); }
+        else if (Input.GetAxis("Button2") > 0)  { OnButtonPress(1); }
+        else if (Input.GetAxis("Button3") > 0)  { OnButtonPress(2); }
     }
 }

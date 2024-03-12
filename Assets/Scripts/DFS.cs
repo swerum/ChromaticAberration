@@ -3,49 +3,56 @@ using System.Collections.Generic;
 // using System.Diagnostics;
 using UnityEngine;
 
-
 class DFSGrid {
     private readonly int rows;
     private readonly int cols;
     private readonly LevelInfo level;
-    private readonly GameObject mouseGameObject;
+    private bool[,] visited;
+    
+    private bool solved = false;
+    public bool Solved { get { return solved; }}
+    private List<Vector2Int> path;
+    public List<Vector2Int> Path { get { return path; }}
 
-    public DFSGrid(LevelInfo levelInfo, GameObject mouse) {
+    public DFSGrid(LevelInfo levelInfo) {
         level = levelInfo;
         rows = levelInfo.levelSize.x;
         cols = levelInfo.levelSize.y;
-        mouseGameObject = mouse;
-    }
+        path = new List<Vector2Int>();
+        visited = new bool[rows+2*level.maxOffset, cols+2*level.maxOffset];
 
-    public bool FindShortestPath() {
         Vector2Int startNode = level.mouseStartPos;
         Vector2Int targetNode = level.cheesePos;
-        bool[,] visited = new bool[rows+2*level.maxOffset, cols+2*level.maxOffset];
-        Debug.Log("Offset: "+level.labyrinths[0].Offset);
-        if (!IsValidCell(startNode.x, startNode.y)) return false; 
-        return DFS_Recursive(startNode, targetNode, visited);
+
+        if (IsValidCell(startNode.x, startNode.y)) {
+            DFS_Recursive(startNode, targetNode);
+        }
     }
 
     // returns true if we've reached the targetNode
-    private bool DFS_Recursive(Vector2Int currentNode, Vector2Int targetNode, bool[,] visited) {
-        if (CheckVisited(currentNode, visited)) { return false; }
+    private void DFS_Recursive(Vector2Int currentNode, Vector2Int targetNode) {
+        if (CheckVisited(currentNode, visited)) { return; }
         SetVisited(currentNode, visited);
-        if (currentNode == targetNode) { return true; }
+        if (currentNode == targetNode) { 
+            solved = true;
+            return; 
+        }
         foreach (Vector2Int neighbor in GetNeighbors(currentNode)) {
             if (CheckVisited(neighbor, visited)) { continue;}
             bool isValid = IsValidCell(neighbor.x, neighbor.y);
             if (!isValid) { continue; }
             //move mouse to neighbor tile
-            Debug.Log("Move to "+neighbor.ToString());
-            bool reachedGoal = DFS_Recursive(neighbor, targetNode, visited);
-            if (reachedGoal)  {
-                return true;
+            path.Add(neighbor);
+
+            DFS_Recursive(neighbor, targetNode);
+            if (solved)  {
+                return;
             } else {
-                Debug.Log("Return to "+currentNode.ToString());
                 //return mouse to current tile
+                path.Add(currentNode);
             }
         }
-        return false;
+        return;
     }
 
     private List<Vector2Int> GetNeighbors(Vector2Int node) {
