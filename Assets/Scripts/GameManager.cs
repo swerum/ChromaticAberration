@@ -12,11 +12,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] AnimationCurve labyrinthMovementAnimation;
     [SerializeField] float labyrinthMovementTime = 0.4f;
     [SerializeField] float mouseMovementTime = 0.4f;
+    [SerializeField] AudioClip moveSound;
+    [SerializeField] AudioClip failSound;
 
     [Header("References")]
     [SerializeField] LevelInfo[] levels;
     [SerializeField] Transform[] labyrinthParents;
     [SerializeField] Camera labyrinthCamera;
+    [SerializeField] AudioSource audioSource;
     [Header("Prefabs")]
     [SerializeField] private GameObject labyrinthTilePrefab;
     [SerializeField] private GameObject mousePrefab;
@@ -40,6 +43,7 @@ public class GameManager : MonoBehaviour
 
     // Start is called before the first frame update
     private void Start() {
+        // audioSource.PlayOneShot(ambientSound,1);
         baseCameraPosition = labyrinthCamera.transform.position;
         InitializeLevel(0);
     }
@@ -68,14 +72,18 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < level.labyrinths.Length; i++)
         {
             LabyrinthInfo labyrinthInfo = level.labyrinths[i];
-            labyrinthInfo.Offset = Vector2.zero;
             Color color = ColorUtil.GetColorFromRGB(labyrinthInfo.rgbColor);
             bool[,] matrix = Util.CreateLabyrinth(color, labyrinthInfo.labyrinthTextFile, labyrinthTilePrefab, level.LevelSize, labyrinthParents[i]);
             labyrinthInfo.LevelMatrix = matrix;
 
+            // set UI button color
             color.a = selectButtons[i].color.a;
             selectButtons[i].color = color;
             selectButtons[i].gameObject.SetActive(true);
+
+            //set starting offset
+            labyrinthInfo.Offset = labyrinthInfo.InitialOffset;//Vector2.zero;
+            labyrinthParents[i].position = new Vector3(labyrinthInfo.Offset.x, 0, labyrinthInfo.Offset.y);
         }
 
         Vector3 mousePos = new Vector3(level.MouseStartPos.x, 0.5f, level.MouseStartPos.y);
@@ -91,9 +99,12 @@ public class GameManager : MonoBehaviour
         LevelInfo currentLevel = levels[currentLevelIndex];
         Vector2 initialOffset = currentLevel.labyrinths[labyrinthIndex].Offset; 
         Vector2 newOffset = initialOffset + direction;
-        if (Mathf.Abs(newOffset.x) > currentLevel.maxOffset) { return; }
-        if (Mathf.Abs(newOffset.y) > currentLevel.maxOffset) { return; }
+        if (Mathf.Abs(newOffset.x) > currentLevel.maxOffset || Mathf.Abs(newOffset.y) > currentLevel.maxOffset) { 
+            audioSource.PlayOneShot(failSound, 0.08f);
+            return; 
+        }
 
+        audioSource.PlayOneShot(moveSound,1);
         //update visuals
         LabyrinthInfo labyrinthInfo = currentLevel.labyrinths[labyrinthIndex];
         IEnumerator coroutine = MoveLabyrinth(labyrinthParents[labyrinthIndex], labyrinthInfo.Offset, direction, labyrinthMovementTime);

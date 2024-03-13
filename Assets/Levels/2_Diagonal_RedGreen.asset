@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f5d4fcf582e943aa94413607cc1616b, type: 3}
+  m_Name: 2_Diagonal_RedGreen
+  m_EditorClassIdentifier: 
+  mouseStartPos: {x: 1, y: 0}
+  cheesePos: {x: 5, y: 4}
+  levelWidth: 6
+  levelHeight: 5
+  labyrinths:
+  - labyrinthTextFile: {fileID: 4900000, guid: f3d020e165ce44816b42811f3693a27c, type: 3}
+    rgbColor: 0
+    initialOffset: {x: -1, y: 0}
+  - labyrinthTextFile: {fileID: 4900000, guid: f3d020e165ce44816b42811f3693a27c, type: 3}
+    rgbColor: 1
+    initialOffset: {x: 0, y: 0}
+  hint: {fileID: 2800000, guid: 32d03ea950bee4fcb84dda277b808484, type: 3}
+  cameraSize: 4
+  maxOffset: 3
+  mouseColors: 03000000

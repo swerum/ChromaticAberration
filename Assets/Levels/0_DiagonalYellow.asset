@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f5d4fcf582e943aa94413607cc1616b, type: 3}
-  m_Name: Level1
+  m_Name: 0_DiagonalYellow
   m_EditorClassIdentifier: 
-  cheesePos: {x: 8, y: 4}
+  cheesePos: {x: 4, y: 4}
   hint: {fileID: 2800000, guid: eb52d5fcc835047efbfa3ea42c2b811a, type: 3}
-  cameraSize: 6
-  levelWidth: 12
-  levelHeight: 7
-  maxOffset: 6
+  cameraSize: 4
+  levelWidth: 6
+  levelHeight: 5
+  maxOffset: 3
   labyrinths:
-  - labyrinthTextFile: {fileID: 4900000, guid: 25cae3a6f4a8a4e23bba5a1376a5afdf, type: 3}
+  - labyrinthTextFile: {fileID: 4900000, guid: f3d020e165ce44816b42811f3693a27c, type: 3}
     rgbColor: 3
-  mouseStartPos: {x: 1, y: 4}
+  mouseStartPos: {x: 0, y: 0}
   mouseColors: 03000000
