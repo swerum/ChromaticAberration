@@ -17,16 +17,21 @@ public class LabyrinthInfo
 [CreateAssetMenu(fileName = "Level", menuName = "ScriptableObjects/LevelInfo", order = 1)]
 public class LevelInfo : ScriptableObject
 {
-    [SerializeField] public Vector2Int cheesePos;
+    [SerializeField] private Vector2Int cheesePos;
+    public Vector2Int CheesePos { get { return new Vector2Int(cheesePos.y, cheesePos.x); }}
     [SerializeField] public Texture hint = null;
+    [SerializeField] public float cameraSize = 4;
 
     [Header("Labyrinth Layout")]
-    [SerializeField] public Vector2Int levelSize;
+    [SerializeField] private int levelWidth;
+    [SerializeField] private int levelHeight;
+    public Vector2Int LevelSize { get { return new Vector2Int(levelHeight, levelWidth); }}
     [SerializeField] public int maxOffset;
     [SerializeField] public LabyrinthInfo[] labyrinths;
 
 
     [Header("Mouse Info")]
-    [SerializeField] public Vector2Int mouseStartPos;
+    [SerializeField] private Vector2Int mouseStartPos;
+    public Vector2Int MouseStartPos { get { return new Vector2Int(mouseStartPos.y, mouseStartPos.x); }}
     [SerializeField] public RGB[] mouseColors;
 }

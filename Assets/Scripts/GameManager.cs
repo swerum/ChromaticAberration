@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [Header("References")]
     [SerializeField] LevelInfo[] levels;
     [SerializeField] Transform[] labyrinthParents;
+    [SerializeField] Camera labyrinthCamera;
     [Header("Prefabs")]
     [SerializeField] private GameObject labyrinthTilePrefab;
     [SerializeField] private GameObject mousePrefab;
@@ -33,11 +34,13 @@ public class GameManager : MonoBehaviour
     private bool disallowMovement = false;
     private GameObject mouse;
     private GameObject cheese;
+    private Vector3 baseCameraPosition;
     // private LevelInfo currentLevel;
     private int currentLevelIndex;
 
     // Start is called before the first frame update
     private void Start() {
+        baseCameraPosition = labyrinthCamera.transform.position;
         InitializeLevel(0);
     }
 
@@ -45,6 +48,11 @@ public class GameManager : MonoBehaviour
     {
         LevelInfo level = levels[index];
         currentLevelIndex = index;
+        //set camera settings
+        float cameraOffset = Mathf.Max(level.LevelSize.x, level.LevelSize.y) / 2f;
+        labyrinthCamera.transform.position = baseCameraPosition + new Vector3(cameraOffset, 0, cameraOffset);
+        labyrinthCamera.orthographicSize = level.cameraSize;
+
         StartCoroutine(ShowHint(level.hint));
         foreach (RawImage button in selectButtons)
         {
@@ -62,7 +70,7 @@ public class GameManager : MonoBehaviour
             LabyrinthInfo labyrinthInfo = level.labyrinths[i];
             labyrinthInfo.Offset = Vector2.zero;
             Color color = ColorUtil.GetColorFromRGB(labyrinthInfo.rgbColor);
-            bool[,] matrix = Util.CreateLabyrinth(color, labyrinthInfo.labyrinthTextFile, labyrinthTilePrefab, level.levelSize, labyrinthParents[i]);
+            bool[,] matrix = Util.CreateLabyrinth(color, labyrinthInfo.labyrinthTextFile, labyrinthTilePrefab, level.LevelSize, labyrinthParents[i]);
             labyrinthInfo.LevelMatrix = matrix;
 
             color.a = selectButtons[i].color.a;
@@ -70,10 +78,10 @@ public class GameManager : MonoBehaviour
             selectButtons[i].gameObject.SetActive(true);
         }
 
-        Vector3 mousePos = new Vector3(level.mouseStartPos.x, 0.5f, level.mouseStartPos.y);
+        Vector3 mousePos = new Vector3(level.MouseStartPos.x, 0.5f, level.MouseStartPos.y);
         mouse = Instantiate(mousePrefab);
         mouse.transform.position = mousePos;
-        Vector3 cheesePos = new Vector3(level.cheesePos.x, 0.5f, level.cheesePos.y);
+        Vector3 cheesePos = new Vector3(level.CheesePos.x, 0.5f, level.CheesePos.y);
         cheese = Instantiate(cheesePrefab);
         cheese.transform.position = cheesePos;
     }
@@ -113,7 +121,7 @@ public class GameManager : MonoBehaviour
             List<Vector2Int> path = dfs.Path;
             disallowMovement = true;
             //mouse traverse labyrinth
-            Vector2 currentPos = currentLevel.mouseStartPos;
+            Vector2 currentPos = currentLevel.MouseStartPos;
             foreach (Vector2Int node in path) {
                 Vector2 offset =  node - currentPos;
                 IEnumerator rotatorCoroutine = Util.RotateOverTime(mouse.transform, GetTargetRotation(offset), mouseMovementTime);

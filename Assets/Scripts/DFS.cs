@@ -16,13 +16,13 @@ class DFSGrid {
 
     public DFSGrid(LevelInfo levelInfo) {
         level = levelInfo;
-        rows = levelInfo.levelSize.y;
-        cols = levelInfo.levelSize.x;
+        rows = levelInfo.LevelSize.x;
+        cols = levelInfo.LevelSize.y;
         path = new List<Vector2Int>();
         visited = new bool[rows+2*level.maxOffset, cols+2*level.maxOffset];
 
-        Vector2Int startNode = level.mouseStartPos;
-        Vector2Int targetNode = level.cheesePos;
+        Vector2Int startNode = level.MouseStartPos;
+        Vector2Int targetNode = level.CheesePos;
 
         if (IsValidCell(startNode.x, startNode.y)) {
             DFS_Recursive(startNode, targetNode);
