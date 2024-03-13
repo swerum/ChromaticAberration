@@ -175,6 +175,7 @@ public class GameManager : MonoBehaviour
         //destroy all the tiles in the labyrinth
         foreach (Transform lab in labyrinthParents)
         {
+            lab.position = Vector3.zero;
             for (int i = 0; i < lab.childCount; i++)
             {
                 Transform child = lab.GetChild(i);

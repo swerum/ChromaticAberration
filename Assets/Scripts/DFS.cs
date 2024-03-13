@@ -16,8 +16,8 @@ class DFSGrid {
 
     public DFSGrid(LevelInfo levelInfo) {
         level = levelInfo;
-        rows = levelInfo.levelSize.x;
-        cols = levelInfo.levelSize.y;
+        rows = levelInfo.levelSize.y;
+        cols = levelInfo.levelSize.x;
         path = new List<Vector2Int>();
         visited = new bool[rows+2*level.maxOffset, cols+2*level.maxOffset];
 

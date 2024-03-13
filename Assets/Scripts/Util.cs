@@ -23,7 +23,7 @@ public static class Util
 
     private static bool[,] FillLevelMatrix(Vector2Int levelSize, TextAsset textFile) {
         string fileContents = textFile.text;
-        bool[,] levelMatrix = new bool[levelSize.x, levelSize.y];
+        bool[,] levelMatrix = new bool[levelSize.y, levelSize.x];
         int row = 0; int col = 0;
         foreach (char c in fileContents)
         {

@@ -37,7 +37,7 @@ public class InputManager : MonoBehaviour
             gameManager.MoveLabyrinth(selectedButtonIndex, direction);
             return;
         }
-        direction.x = Math.Sign(Input.GetAxis("Vertical"));
+        direction.x = -Math.Sign(Input.GetAxis("Vertical"));
         if (direction.x != 0) {
             gameManager.MoveLabyrinth(selectedButtonIndex, direction);
         }
