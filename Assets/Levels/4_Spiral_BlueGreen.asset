@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f5d4fcf582e943aa94413607cc1616b, type: 3}
+  m_Name: 4_Spiral_BlueGreen
+  m_EditorClassIdentifier: 
+  mouseStartPos: {x: 0, y: 0}
+  cheesePos: {x: 5, y: 4}
+  levelWidth: 15
+  levelHeight: 13
+  labyrinths:
+  - labyrinthTextFile: {fileID: 4900000, guid: 9bb9b354768fb45078c0dce72e2ca780, type: 3}
+    rgbColor: 1
+    initialOffset: {x: 1, y: -1}
+  - labyrinthTextFile: {fileID: 4900000, guid: aa8cf3d226c1c464180b43497cc3b5df, type: 3}
+    rgbColor: 2
+    initialOffset: {x: 0, y: -1}
+  hint: {fileID: 0}
+  cameraSize: 7
+  maxOffset: 5
+  mouseColors: 04000000

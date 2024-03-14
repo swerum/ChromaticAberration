@@ -43,8 +43,8 @@ public class InputManager : MonoBehaviour
         }
 
         //check for 1,2,3 which activate the buttons
-        if (Input.GetAxis("Button1") > 0)       { OnButtonPress(0); }
-        else if (Input.GetAxis("Button2") > 0)  { OnButtonPress(1); }
-        else if (Input.GetAxis("Button3") > 0)  { OnButtonPress(2); }
+        if      (Input.GetAxis("Button1") > 0 && buttons[0].gameObject.activeInHierarchy) { OnButtonPress(0); }
+        else if (Input.GetAxis("Button2") > 0 && buttons[1].gameObject.activeInHierarchy) { OnButtonPress(1); }
+        else if (Input.GetAxis("Button3") > 0 && buttons[2].gameObject.activeInHierarchy) { OnButtonPress(2); }
     }
 }

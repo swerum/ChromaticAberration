@@ -19,8 +19,8 @@ MonoBehaviour:
   labyrinths:
   - labyrinthTextFile: {fileID: 4900000, guid: 9b4dfd4900b24478bb9b0c5c918e77e3, type: 3}
     rgbColor: 3
-    initialOffset: {x: 0, y: 0}
-  hint: {fileID: 2800000, guid: eb52d5fcc835047efbfa3ea42c2b811a, type: 3}
+    initialOffset: {x: 3, y: 0}
+  hint: {fileID: 0}
   cameraSize: 6
   maxOffset: 6
   mouseColors: 03000000

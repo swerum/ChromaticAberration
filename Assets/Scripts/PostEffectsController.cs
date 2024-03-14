@@ -15,7 +15,7 @@ public class PostEffectsController : MonoBehaviour
         SetAberrationOffsets(redBaseOffset, blueBaseOffset);
     }
     private void OnRenderImage(RenderTexture src, RenderTexture dest) {
-        // SetAberrationOffsets(redBaseOffset, blueBaseOffset);
+        SetAberrationOffsets(redBaseOffset, blueBaseOffset);
         RenderTexture renderTexture = RenderTexture.GetTemporary(src.width, src.height, 0, src.format);
         Graphics.Blit(src, renderTexture, postEffectMaterial);
         Graphics.Blit(renderTexture, dest);

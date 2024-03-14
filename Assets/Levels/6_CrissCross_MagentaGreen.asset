@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f5d4fcf582e943aa94413607cc1616b, type: 3}
+  m_Name: 6_CrissCross_MagentaGreen
+  m_EditorClassIdentifier: 
+  mouseStartPos: {x: 0, y: 0}
+  cheesePos: {x: 10, y: 9}
+  levelWidth: 11
+  levelHeight: 12
+  labyrinths:
+  - labyrinthTextFile: {fileID: 4900000, guid: 4d1284d7cbee245fb865312c09adbbf1, type: 3}
+    rgbColor: 5
+    initialOffset: {x: 2, y: -1}
+  - labyrinthTextFile: {fileID: 4900000, guid: 4c997918973964182adafdf685099242, type: 3}
+    rgbColor: 1
+    initialOffset: {x: -1, y: 2}
+  hint: {fileID: 0}
+  cameraSize: 7
+  maxOffset: 5
+  mouseColors: 06000000
